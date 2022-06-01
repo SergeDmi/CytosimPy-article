@@ -83,7 +83,7 @@ MTs = frame["microtubule"]
 MTs is a list of objects, the name of which is "microtubule", and all described by the same property :
 ```python
 points = MTs[0].points() # returns the position of the points of the 1st microtubule
-prop MTs.prop # the property of microtubules
+prop = MTs.prop # the property of microtubules
 ```  
 
 

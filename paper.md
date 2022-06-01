@@ -73,6 +73,18 @@ points = fiber.points()
 
 Here, Fiber.points() is one of the few accessory functions that are specific to PyCytosim to facilitate the interface to Cytosim objects. Most members and member functions are merely binding to the cytosim members ; for instance, *Simul.fibers* is a binding to the member *fibers* of the cytosim class Simul (e.g. *Simul::fibers*). Therefore the Cytosim doctumentation readily documents the vast majority of PyCytosim.
 
+### PyCytosim frame
+
+PyCytosim provides a convenient interface to the objects stored in a simulation, that is python-specific. A frame (instance of python class *cytosim.Frame*) can be created through ```python simul.frame() ``` . It behaves as a dictionary of lists of objects having the same property. In the following code :  
+```python
+frame = simul.frame()  
+MTs = frame["microtubule"]  
+```  
+MTs is a list of objects, the name of which is "microtubule", and all described by the same property :
+```python
+points = MTs[0].points() # returns the position of the points of the 1st microtubule
+prop MTs.prop # the property of microtubules
+```  
 
 
 ## Availability

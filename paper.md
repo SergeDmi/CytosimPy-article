@@ -32,7 +32,7 @@ We developped a python interface with cytosim, that allows real-time access to n
 
 Since its 2007 release, cytosim has attracted a lot of use [CITE] given its capacity to rapidly simulate large networks. The input interface to the simulation lies in a configuration file, interpreted by the simulation engine, calling the classes defined in the C++ code. Beyond its graphical interface, the output of the simulation is done by reporting in text files, that are typically later analyzed by users through data analysis scripts, usually written in python or matlab. 
 
-Through our experience with the simulation and its users, we realized that this workflow offered several caveats. To run simulations for a range of parameter values, a list of configuration files had to be generated. To do this automatically, a utility (preconfig.py) was provided [CITE] but it did not cover all use cases. The configuration files also do not scripting, such as dynamic events (e.g. finish the simulation if there are more than 100 filaments). The output to text files was limited in scope, and any new desired reporting had to be coded in C++, which offered several challenges.  Lastly, the user could not add or change features without going through the lengthy and technical process of creating a new C++ class, implementing the features in C++, and consequently altering the compilation process. Given the complexity of biological processes, it was inevitable that users would require novel features, and were not able to implement them in the simulation.
+Through our experience with the simulation and its users, we realized that this workflow offered several caveats. To run simulations for a range of parameter values, a list of configuration files had to be generated. To do this automatically, a utility (preconfig.py) was provided [CITE] but it did not cover all use cases. The configuration files also do not scripting, such as dynamic events (e.g. finish the simulation if a given event has occured). The output to text files was limited in scope, and any new desired reporting had to be coded in C++, which offered several challenges.  Lastly, the user could not add or change features without going through the lengthy and technical process of creating a new C++ class, implementing the features in C++, and consequently altering the compilation process. Given the complexity of biological processes, it was inevitable that users would require novel features, and were not able to implement them in the simulation. Ultimately, this causes issues of code maintenance because of the always growing codebase.
 
 Therefore, we developed PyCytosim, a python interface for Cytosim. This allows user to directly access the native cytosim objects (C++ class instances) in python. Thus objects can be created, the simulation can be altered, and the results can be analyzed at runtime, in python. Thus, a user can seamlessly run and analyze simulations for ranges of parameters, while keeping a dynamic control on simulations. 
 
@@ -92,7 +92,7 @@ Here points is a numpy array that has been copied from the simulation. For the s
 ```python
 import numpy as np  
 fiber = fibers[0]  
-points = np.array(fiber.data(), copy = False)  
+points = np.array(fiber.data(), copy = False)  # this is more risky as we directly access
 ```
 
 As mentioned, we python/C++ interface is transparent to the user and thus member functions can be called with conversions :

@@ -75,19 +75,25 @@ for k in range(K):
 	simul.save()
 ```
 
-A cytosim object (Fiber, Solid, etc.) contains an array points stored as double precision in memory. It is possible to directly access these arrays as numpy arrays without copy operations - at the risk of altering them. In this case an explicit conversion has to be perfomed :   
+It is possible to access the members of *simul* (which is also an object of class *Simul*), e.g. it property, the fibers it stores, and the current time :
 ```python
-fiber = simul.fibers[0]  
+fibers = simul.fibers 
+simul_prop = simul.prop
+print(simul.time())
+```
+
+A cytosim object (Fiber, Solid, etc.) contains an array points stored as double precision in memory. As mentioned, most conversions are implicit. The following code returns the points of a filament as a numpy array :
+```python
+fiber = fibers[0]  
+points = fiber.points() # points is a numpy array
+```
+
+Here points is a numpy array that has been copied from the simulation. For the sake of performance of interoperability, it is also possible to directly access the points in memory in cytosim, by explicitely converting the data in memory to a numpy array :
+```python
+import numpy as np
+fiber = fibers[0]  
 points = np.array(fiber.data(), copy = False)
 ```
-
-While this may be useful for the sake of performance, or for efficiently interfacing cytosim with another simulation, it is usually to manipulate a copy of the points, in which case no explicit conversion needs be performed :  
-```python
-fiber = simul.fibers[0]  
-points = fiber.points()
-```
-
-Here, Fiber.points() is one of the few accessory functions that are specific to PyCytosim to facilitate the interface to Cytosim objects. Most members and member functions are merely binding to the cytosim members ; for instance, *Simul.fibers* is a binding to the member *fibers* of the cytosim class Simul (e.g. *Simul::fibers*). Therefore the Cytosim doctumentation readily documents the vast majority of PyCytosim.
 
 ### PyCytosim frame
 

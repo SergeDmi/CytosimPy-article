@@ -92,7 +92,7 @@ Here points is a numpy array that has been copied from the simulation. For the s
 ```python
 import numpy as np  
 fiber = fibers[0]  
-points = np.array(fiber.data(), copy = False)  # this is more risky as we directly access
+points = np.array(fiber.data(), copy = False)  # this is more risky as we directly access Cytosim memory
 ```
 
 As mentioned, the python/C++ interface is transparent to the user and thus member functions can be called with conversions. Here, we actually call *Simul::fibers::erase(Fiber)* from python, passing  it as argument the fiber stored in a python variable *fiber* :

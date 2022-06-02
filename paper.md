@@ -95,7 +95,7 @@ fiber = fibers[0]
 points = np.array(fiber.data(), copy = False)  # this is more risky as we directly access
 ```
 
-As mentioned, we python/C++ interface is transparent to the user and thus member functions can be called with conversions :
+As mentioned, the python/C++ interface is transparent to the user and thus member functions can be called with conversions. Here, we actually call *Simul::fibers::erase(Fiber)* from python, passing  it as argument the fiber stored in a python variable *fiber* :
 ```python
 fibers.erase(fiber)  
 print(len(simul.fibers))  

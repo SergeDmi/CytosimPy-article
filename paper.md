@@ -86,28 +86,19 @@ points = MTs[0].points() # returns the position of the points of the 1st microtu
 prop = MTs.prop # the property of microtubules
 ```  
 
+# Usage
+
+PyCytosim opens a host of new possibilities. First, reading from, and analyzing simulations becomes much more straightforward, reduces the volume of scripting necessary. Second, to run a batch of jobs (e.g. with different parameters) can be done in pure python, and combined with analysis. This drastically reduces the need for cross language scripting. Lastly, and most importantly, the simulations becomes an open playground in which virtually anything can be done via python scripting without the need for C++ programming and compilation. We provide jupyter notebooks with PyCytosim several examples of simple to advanced usages :
+
+- Creation and deletion of pre-defined objects  
+- Defition and creation of new objects  
+- Creation of complex objects  
+- Adding forces to a system
+- Gamification of cytosim  
 
 ## Availability
 
-Plyssim is available on [github](https://github.com/SergeDmi/Plyssim), and compiles on Mac and Linux, with Clang, GCC, and ICC (albeit slower with ICC) provided required libraries are installed. A docker image is provided on [dockerhub](https://hub.docker.com/r/sergedmi/plyssim).
-
-# Plyconvert
-PlyConvert is a simple command-line utility tool to perform simple manipulations on ply files. It is written in Python 3 and uses the plydata structure from the package plyfile as a backend. Typically it is used to re-scale, align, rename or convert ply files. This can be performed for a single file, or in batch, searching recursively in folders.
-
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
-
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
+Cytosim is availbale on [gitlab](https://gitlab.com/f-nedelec/cytosim/-/tree/pybind), and compiles on Mac and Linux with Clang, GCC, and ICC (albeit slower with ICC) provided required libraries are installed.
 
 # Citations
 

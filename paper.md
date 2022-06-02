@@ -97,16 +97,34 @@ points = np.array(fiber.data(), copy = False)
 
 ### PyCytosim frame
 
-PyCytosim provides a convenient interface to the objects stored in a simulation, that is python-specific. A frame (instance of python class *cytosim.Frame*) can be created through ```python simul.frame() ``` . It behaves as a dictionary of lists of objects having the same property. In the following code :  
+PyCytosim provides a convenient interface to the objects stored in a simulation, that is specifically designed for python use. First we will load the simulation that we have previously saved, the results of which being stored in *objects.cmo*, and the configuration in *properties.cmo* :
+```python
+import cytosim
+simul = cytosim.open()
+simul.load(0) # loads in memory the first recorded simulation state
+```
+
+A frame (instance of python class *cytosim.Frame*) can be created through ```python simul.frame() ``` . It behaves as a dictionary of lists of objects having the same property. In the following code :  
 ```python
 frame = simul.frame()  
 MTs = frame["microtubule"]  
 ```  
 MTs is a list of objects, the name of which is "microtubule", and all described by the same property :
 ```python
-points = MTs[0].points() # returns the position of the points of the 1st microtubule
-prop = MTs.prop # the property of microtubules
+id0 = MTs[0].id() # id of the first microtubule
+MTs_prop = MTs.prop # the property of microtubules
+n_MTs = len(MTs) # number of microtubules
+for mt in MTs:
+	print(mt.points()) # returns the position of the points of the 1st microtubule
 ```  
+
+We can jump to the next frame iteratively, or skip directly to a chosen frame easily :
+```python
+frame = frame.next()
+print(frame.time)
+frame = simul.loadframe(10)
+print(frame.time)
+```
 
 # Usage
 

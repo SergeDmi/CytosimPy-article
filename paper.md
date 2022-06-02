@@ -48,14 +48,14 @@ The vectors $f$ and matrices $\partial f/\partial x$ are stored as a large vecto
 
 The objects themselves are instances of C++ classes. Cytosim classes follow the object-oriented paradigm and uses extensively class inheritence. For example, a cytosim filament is an instance of class Fiber, that derives from class Meca (a set of points on which forces can be implemented), that itself derives from Object. One or several objects are associated to an instance of Property, that contains the properties of these objects, e.g. the rigidity of a fiber, the stiffness of a crosslinker, etc. 
 
-Thus a Cytosim simulation essentially stores a (usually large) collection of objects and a (usually small) collection of object properties, as well as a force vector $f$ and a force derivative matrix $\partial f/\partial x$ stored in an instance of the class Meca. Object mechanics, and mechanical interactions between objects will add elements to $f$ and  $\partial f/\partial x$ through accessory functions implemented in the class Meca. 
+Thus a Cytosim simulation essentially stores a (usually large) collection of objects and a (usually small) collection of object properties, as well as a force vector $f$ and a force derivative matrix $\partial f/\partial x$ stored in an instance of the class Meca. Object mechanics, and mechanical interactions between objects will add elements to $f$ and  $\partial f/\partial x$ through accessory functions implemented in the class Meca. Collections of objects are stored in instances of the class *ObjectSet*. For instance, *Simul::fibers* is an *ObjectSet* containing all the fibers being simulated.
 
 ## PyCytosim
 
 PyCytosim is designed to provide a python interface to a running cytosim simulation - and thus can access cytosim objects in memory at runtime. Most cytosim objects, such as fibers (instances of class Fiber) are passed to python by reference, so that the destruction of the python variable does not cause the destruction of the cytosim object in memory. The python class is accessible in the PyCytosim module as *cytosim.Class* (e.g. *cytosim.Fiber*). 
 
 C++ classes have member variable and functions, that can be public or private. Most public functions of Cytosim classes have been bound or translated to the python classes. For exemple, Fiber::property() is a C++ member function of class Fiber that returns (a pointer to) the fiber's property. In python it is available as Fiber.property() and returns a reference to the property itself.
- Because it is possible to directly access native Cytosim objects, an effort was put to bind as many cytosim objects, and their members, as possible. Thus these objects can be directly manipulated in python, as well as passed as arguments to the (python-bound) C++ member functions. For instance a instance of the python class *cytosim.Fiber* can be passed to a binding of any C++ function that takes a Fiber as input, e.g. *Simul::Fibers::delete(fiber)*. 
+ Because it is possible to directly access native Cytosim objects, an effort was put to bind as many cytosim objects, and their members, as possible. Thus these objects can be directly manipulated in python, as well as passed as arguments to the (python-bound) C++ member functions. For instance a instance of the python class *cytosim.Fiber* can be passed to a binding of any C++ function that takes a Fiber as input, e.g. *Simul::fibers::erase(fiber)*. 
 
 For some variable types, a conversion step Python->C++ or C++->Python is necessary. For example the cytosim C++ class *Vector* is converted to a numpy array (and other way round), since using a numpy array is more natural in python than Cytosim's vector. In these cases, the conversion is usually performed in the binding rather than by the user. Therefore, for the user, PyCytosim behaves as a regular python module where (nearly) no conversion has to be explicitely performed. 
 
@@ -68,39 +68,45 @@ simul = cytosim.start("example.cym")
 
 Typically, we want to save the simulation state (a *frame*) every $N$ number of steps, to limit the size saved on drive. To run $K$ frames of $n$ frames each, one would run : 
 ```python
-K = 20 # number of frames
-N = 10 # steps per frame
-for k in range(K):
-	simul.run(N)
+K = 20 # number of frames  
+N = 10 # steps per frame  
+for k in range(K):  
+	simul.run(N)  
 	simul.save()
 ```
 
 It is possible to access the members of *simul* (which is also an object of class *Simul*), e.g. it property, the fibers it stores, and the current time :
 ```python
-fibers = simul.fibers 
-simul_prop = simul.prop
-print(simul.time())
+fibers = simul.fibers  
+simul_prop = simul.prop  
+print(simul.time())  
 ```
 
 A cytosim object (Fiber, Solid, etc.) contains an array points stored as double precision in memory. As mentioned, most conversions are implicit. The following code returns the points of a filament as a numpy array :
 ```python
 fiber = fibers[0]  
-points = fiber.points() # points is a numpy array
+points = fiber.points() # points is a numpy array  
 ```
 
 Here points is a numpy array that has been copied from the simulation. For the sake of performance of interoperability, it is also possible to directly access the points in memory in cytosim, by explicitely converting the data in memory to a numpy array :
 ```python
-import numpy as np
+import numpy as np  
 fiber = fibers[0]  
-points = np.array(fiber.data(), copy = False)
+points = np.array(fiber.data(), copy = False)  
+```
+
+As mentioned, we python/C++ interface is transparent to the user and thus member functions can be called with conversions :
+```python
+fibers.erase(fiber)  
+print(len(simul.fibers))  
 ```
 
 ### PyCytosim frame
 
 PyCytosim provides a convenient interface to the objects stored in a simulation, that is specifically designed for python use. First we will load the simulation that we have previously saved, the results of which being stored in *objects.cmo*, and the configuration in *properties.cmo* :
 ```python
-import cytosim
-simul = cytosim.open()
+import cytosim  
+simul = cytosim.open()  
 simul.load(0) # loads in memory the first recorded simulation state
 ```
 
@@ -111,19 +117,19 @@ MTs = frame["microtubule"]
 ```  
 MTs is a list of objects, the name of which is "microtubule", and all described by the same property :
 ```python
-id0 = MTs[0].id() # id of the first microtubule
-MTs_prop = MTs.prop # the property of microtubules
-n_MTs = len(MTs) # number of microtubules
-for mt in MTs:
+id0 = MTs[0].id() # id of the first microtubule  
+MTs_prop = MTs.prop # the property of microtubules  
+n_MTs = len(MTs) # number of microtubules  
+for mt in MTs:  
 	print(mt.points()) # returns the position of the points of the 1st microtubule
 ```  
 
 We can jump to the next frame iteratively, or skip directly to a chosen frame easily :
 ```python
-frame = frame.next()
-print(frame.time)
-frame = simul.loadframe(10)
-print(frame.time)
+frame = frame.next()  
+print(frame.time)  
+frame = simul.loadframe(10)  
+print(frame.time)  
 ```
 
 # Usage

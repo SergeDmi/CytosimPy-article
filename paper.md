@@ -52,12 +52,28 @@ Thus a Cytosim simulation essentially stores a (usually large) collection of obj
 
 ## PyCytosim
 
-PyCytosim is designed to provide a python interface to a running cytosim simulation - and thus can access cytosim objects in memory at runtime. Most cytosim objects, such as fibers (instances of class Fiber) are passed to python by reference, so that the destruction of the python variable does not cause the destruction of the cytosim object in memory. The python class is accessible in the PyCytosim module as *cytosim.Class* (e.g. *cytosim.Fiber*).  
+PyCytosim is designed to provide a python interface to a running cytosim simulation - and thus can access cytosim objects in memory at runtime. Most cytosim objects, such as fibers (instances of class Fiber) are passed to python by reference, so that the destruction of the python variable does not cause the destruction of the cytosim object in memory. The python class is accessible in the PyCytosim module as *cytosim.Class* (e.g. *cytosim.Fiber*). 
 
 C++ classes have member variable and functions, that can be public or private. Most public functions of Cytosim classes have been bound or translated to the python classes. For exemple, Fiber::property() is a C++ member function of class Fiber that returns (a pointer to) the fiber's property. In python it is available as Fiber.property() and returns a reference to the property itself.
  Because it is possible to directly access native Cytosim objects, an effort was put to bind as many cytosim objects, and their members, as possible. Thus these objects can be directly manipulated in python, as well as passed as arguments to the (python-bound) C++ member functions. For instance a instance of the python class *cytosim.Fiber* can be passed to a binding of any C++ function that takes a Fiber as input, e.g. *Simul::Fibers::delete(fiber)*. 
 
-For some variable types, a conversion step Python->C++ or C++->Python is necessary.For example the cytosim C++ class *Vector* is converted to a numpy array (and other way round), since using a numpy array is more natural in python than Cytosim's vector. In these cases, the conversion is usually performed in the binding rather than by the user. Therefore, for the user, PyCytosim behaves as a regular python module where (nearly) no conversion has to be explicitely performed.  
+For some variable types, a conversion step Python->C++ or C++->Python is necessary. For example the cytosim C++ class *Vector* is converted to a numpy array (and other way round), since using a numpy array is more natural in python than Cytosim's vector. In these cases, the conversion is usually performed in the binding rather than by the user. Therefore, for the user, PyCytosim behaves as a regular python module where (nearly) no conversion has to be explicitely performed. 
+
+Thus, to start a simulation described by a configuration file *example.cym", one would run in python :
+
+```python
+import cytosim
+simul = cytosim.start("example.cym")
+```
+
+Typically, we want to save the simulation state (a *frame*) every $N$ number of steps, to limit the size saved on drive. To run $K$ frames of $n$ frames each, one would run : 
+```python
+K = 20 # number of frames
+N = 10 # steps per frame
+for k in range(K):
+	simul.run(N)
+	simul.save()
+```
 
 A cytosim object (Fiber, Solid, etc.) contains an array points stored as double precision in memory. It is possible to directly access these arrays as numpy arrays without copy operations - at the risk of altering them. In this case an explicit conversion has to be perfomed :   
 ```python
@@ -125,6 +141,6 @@ Figure sizes can be customized by adding an optional second parameter:
 
 # Acknowledgements
 
-S.D. aknowledges Nicolas Minc for getting him interested in cell wall mechanics, the entire Minc lab past and present for interactions, and CNRS-Momentum for the funding.
+S.D. aknowledges ...,  the entire Minc lab past and present for interactions, and INSERM for the funding. FJN acknowledges.
 
 # References 

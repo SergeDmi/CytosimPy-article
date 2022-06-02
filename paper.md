@@ -106,7 +106,7 @@ print(len(simul.fibers))
 PyCytosim provides a convenient interface to the objects stored in a simulation, that is specifically designed for python use. First we will load the simulation that we have previously saved, the results of which being stored in *objects.cmo*, and the configuration in *properties.cmo* :
 ```python
 import cytosim  
-simul = cytosim.open()  
+simul = cytosim.open() # assuming properties.cmo and objects.cmo are in the current folder
 simul.load(0) # loads in memory the first recorded simulation state
 ```
 

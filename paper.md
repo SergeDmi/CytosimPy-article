@@ -143,7 +143,7 @@ PyCytosim opens a host of new possibilities. First, reading from, and analyzing 
 
 ## Availability
 
-Cytosim is availbale on [gitlab](https://gitlab.com/f-nedelec/cytosim/-/tree/pybind), and compiles on Mac and Linux with Clang, GCC, and ICC (albeit slower with ICC) provided required libraries are installed.
+PyCytosim is open source software available on [gitlab](https://gitlab.com/f-nedelec/cytosim/-/tree/pybind), and compiles on Mac and Linux with Clang, GCC, and ICC (albeit slower with ICC) provided required libraries are installed. It uses a GPL3 licence.
 
 # Citations
 

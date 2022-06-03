@@ -87,7 +87,7 @@ fiber = fibers[0]
 points = fiber.points() # points is a numpy array  
 ```
 
-Here points is a numpy array that has been copied from the simulation. For the sake of performance and interoperability, it is also possible to directly access the points in memory in cytosim, by explicitely converting the data in memory to a numpy array :
+Here ```points``` is a numpy array that has been copied from the simulation. For the sake of performance and interoperability, it is also possible to directly access the points in memory in cytosim, by explicitely converting the data in memory to a numpy array :
 ```python
 import numpy as np  
 fiber = fibers[0]  

@@ -104,9 +104,9 @@ fibers.erase(fiber)
 print(len(simul.fibers))  
 ```
 
-Solarized dark             |  Solarized Ocean
-:-------------------------:|:-------------------------:
-![](figures/image0000.png)  |  ![](figures/image0001.png)
+Only repulsive forces             |  + Attractive forces | + Aligment | + Movement
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
+![](figures/image0000.png)  |  ![](figures/image0001.png)  |  ![](figures/image0002.png)  |  ![](figures/image0003.png)
 
 ### PyCytosim frame
 

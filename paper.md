@@ -48,6 +48,10 @@ The vectors $f$ and matrices $\partial f/\partial x$ are stored as a large vecto
 
 The objects themselves are instances of C++ classes. Cytosim classes follow the object-oriented paradigm and uses extensively class inheritence. For example, a cytosim filament is an instance of class Fiber, that derives from class Meca (a set of points on which forces can be implemented), that itself derives from Object. One or several objects are associated to an instance of Property, that contains the properties of these objects, e.g. the rigidity of a fiber, the stiffness of a crosslinker, etc. 
 
+
+![\textbf{Overview of the organization of a cytosim simulation.}
+\label{fig:cytosim}](figures/cytosim_diagram.png)
+
 Thus a Cytosim simulation essentially stores a (usually large) collection of objects and a (usually small) collection of object properties, as well as a force vector $f$ and a force derivative matrix $\partial f/\partial x$ stored in an instance of the class Meca. Object mechanics, and mechanical interactions between objects will add elements to $f$ and  $\partial f/\partial x$ through accessory functions implemented in the class Meca. Collections of objects are stored in instances of the class *ObjectSet*. For instance, *Simul::fibers* is an *ObjectSet* containing all the fibers being simulated.
 
 ## PyCytosim
@@ -99,6 +103,10 @@ As mentioned, the python/C++ interface is transparent to the user and thus membe
 fibers.erase(fiber)  
 print(len(simul.fibers))  
 ```
+
+Solarized dark             |  Solarized Ocean
+:-------------------------:|:-------------------------:
+![](figures/image0000.png)  |  ![](figures/image0001.png)
 
 ### PyCytosim frame
 

@@ -103,7 +103,7 @@ As mentioned, the python/C++ interface is transparent to the user and thus membe
 fibers.erase(fiber)  
 print(len(simul.fibers))  
 ```
-![\textbf{Adding forces from python in Cytosim simulations.}
+![\textbf{Adding forces from python in Cytosim simulations.}\label{fig:fish}]
 Only repulsive forces             |  + Attractive forces | + Aligment | + Movement
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![](figures/image0000.png)  |  ![](figures/image0001.png)  |  ![](figures/image0002.png)  |  ![](figures/image0003.png)

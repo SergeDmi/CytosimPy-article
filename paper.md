@@ -43,9 +43,9 @@ PyCytosim is implemented in C++17 and relies on the core of Cytosim core with ha
 ## Cytosim
 
 Cytosim solves the Langevin equation for a set of objects [CITE]. Since Cytosim uses an implicit scheme to solve this equation, the forces are usually computed through a local quadratic approximations :  
-$$ f(x+\delta x) = f(x) + \delta x \, \partial f/\partial x \big|_x $$
+$$ f(x+\delta x) = f(x) + \delta x \quad \partial f/\partial x \big|_x $$
 
-The vectors $\, f \,$ and matrices $\partial f/\partial x$ are stored as a large vector and matrix for all the objects of the simulation. Additionally, biochemical reactions can be defined for some objects. Those are implemented through the Gillespie algorithm.
+The vectors $`f`$ and matrices $\partial f/\partial x$ are stored as a large vector and matrix for all the objects of the simulation. Additionally, biochemical reactions can be defined for some objects. Those are implemented through the Gillespie algorithm.
 
 The objects themselves are instances of C++ classes. Cytosim classes follow the object-oriented paradigm and uses extensively class inheritence. For example, a cytosim filament is an instance of class Fiber, that derives from class Meca (a set of points on which forces can be implemented), that itself derives from Object. One or several objects are associated to an instance of Property, that contains the properties of these objects, e.g. the rigidity of a fiber, the stiffness of a crosslinker, etc. 
 

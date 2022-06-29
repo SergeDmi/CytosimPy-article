@@ -104,7 +104,7 @@ fibers.erase(fiber)
 print(len(simul.fibers))  
 ```
 
-As a demonstration of the capabilities of PyCytosim, we implemented a flocking behaviour in an active nematics model. For this we started from a simulation with repulsive, short, rigid filaments, and we added a long-range attractive force, an alignment potential, and a movemement along the filament direction.
+As a demonstration of the capabilities of PyCytosim (examples/pycytosim_flock.ipynb), we implemented a flocking behaviour in an active nematics model. For this we started from a simulation with repulsive, short, rigid filaments, and we added a long-range attractive force, an alignment potential, and a movemement along the filament direction.
 
 Only repulsive forces             |  + Attractive forces | + Aligment | + Movement
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
@@ -145,11 +145,11 @@ print(frame.time)
 
 PyCytosim opens a host of new possibilities. First, reading from, and analyzing simulations becomes much more straightforward, reduces the volume of scripting necessary. Second, to run a batch of jobs (e.g. with different parameters) can be done in pure python, and combined with analysis. This drastically reduces the need for cross language scripting. Lastly, and most importantly, the simulations becomes an open playground in which virtually anything can be done via python scripting without the need for C++ programming and compilation. We provide jupyter notebooks with PyCytosim several examples of simple to advanced usages :
 
-- Creation and deletion of pre-defined objects  
-- Definition and creation of new objects  
-- Creation of complex objects  
-- Adding forces to a system
-- Gamification of cytosim  
+- Creation and deletion of pre-defined objects (examples/pycytosim_objects.ipynb)
+- Definition and creation of new objects (examples/pycytosim_extend.ipynb)
+- Creation of complex objects (examples/pycytosim_construct.ipynb)
+- Adding forces to a system (examples/pycytosim_meca.ipynb)
+- Gamification of cytosim (examples/pycytoplay_callbacks.ipynb)
 
 ## Availability
 

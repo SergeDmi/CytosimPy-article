@@ -43,7 +43,7 @@ PyCytosim is implemented in C++17 and relies on the core of Cytosim core with ha
 ## Cytosim
 
 Cytosim solves the Langevin equation for a set of objects [CITE]. Since Cytosim uses an implicit scheme to solve this equation, the forces are usually computed through a local quadratic approximations :  
-$$ f(x_0+\delta x) = f(x_0) + \delta x \quad \partial f/\partial x \big|_{x_0} $$
+$$ f(x_0+\delta x) = f(x_0) + \delta x \left( \partial f/\partial x \right)_{x_0} $$
 
 The vectors *f* and matrices $\partial f/\partial x$ are stored as a large vector and matrix for all the objects of the simulation. Additionally, biochemical reactions can be defined for some objects. Those are implemented through the Gillespie algorithm.
 

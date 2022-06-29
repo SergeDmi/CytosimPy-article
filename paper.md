@@ -104,6 +104,8 @@ fibers.erase(fiber)
 print(len(simul.fibers))  
 ```
 
+As a demonstration of the capabilities of PyCytosim, we implemented a flocking behaviour in an active nematics model. For this we started from a simulation with repulsive, short, rigid filaments, and we added a long-range attractive force, an alignment potential, and a movemement along the filament direction.
+
 Only repulsive forces             |  + Attractive forces | + Aligment | + Movement
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
 ![](figures/image0000.png)  |  ![](figures/image0001.png)  |  ![](figures/image0002.png)  |  ![](figures/image0003.png)

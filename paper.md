@@ -66,7 +66,8 @@ For some variable types, a conversion step Python->C++ or C++->Python is necessa
 Thus, to start a simulation described by a configuration file *example.cym", one would run in python :  
 ```python
 import cytosim
-simul = cytosim.start("example.cym")
+parser = cytosim.start("example.cym")
+simul = parser.simul
 ```
 
 Typically, we want to save the simulation state (a *frame*) every $N$ number of steps, to limit the size saved on drive. To run $K$ frames of $N$ frames each, one would run : 
@@ -115,7 +116,8 @@ Only repulsive forces             |  + Attractive forces | + Aligment | + Moveme
 PyCytosim provides a convenient interface to the objects stored in a simulation, that is specifically designed for python use. First we will load the simulation that we have previously saved, the results of which being stored in *objects.cmo*, and the configuration in *properties.cmo* :
 ```python
 import cytosim  
-simul = cytosim.open() # assuming properties.cmo and objects.cmo are in the current folder
+parser = cytosim.open() # assuming properties.cmo and objects.cmo are in the current folder
+simul = parser.simul
 simul.load(0) # loads in memory the first recorded simulation state
 ```
 

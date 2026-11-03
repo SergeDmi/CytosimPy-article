@@ -10,6 +10,9 @@ authors:
   - name: Serge Dmitrieff^[*]
     orcid: 0000-0002-1362-5670
     affiliation: "1"
+  - name: Amir Khosravanizadeh
+    orcid: 0000-0002-7375-0051
+    affiliation: "1"
   - name: François Nédélec
     orcid: 0000-0002-8141-5288
     affiliation: "2"
@@ -24,21 +27,20 @@ bibliography: paper.bib
 
 # Summary
 
-Cytosim is a state-of-the art simulator for semi-flexible polymer dynamics, and cytoskeletal networks in particular. It is a fast C++ implementation of the Langevin equations (for mechanics) and Gillespie algorithm (for biochemical reactions), that encompases a broad range of biological objects : cytoskeleton fibers, molecular motors, and other objects.  
-We developped a python interface with cytosim, that allows real-time access to native cytosim objects. Thus is it possible to not only access the simulation state - e.g. to analyze it - but also to modify the simulation state using python commands.
-
+Cytosim is a state-of-the art simulator for semi-flexible polymer dynamics, and cytoskeletal networks in particular. It is a fast C++ implementation of the Langevin equations (for mechanics) and Gillespie algorithm (for biochemical reactions), that encompasses a broad range of biological objects : cytoskeleton fibers, molecular motors, and other objects.  
+We developed a python interface for Cytosim, that allows real-time access to native Cytosim objects. Thus is it possible to not only access the simulation state - e.g. to analyze it - but also to modify the simulation state using python scripting.
 
 # Statement of need
 
-Since its 2007 release, cytosim has attracted a lot of use [CITE] given its capacity to rapidly simulate large networks. The input interface to the simulation lies in a configuration file, interpreted by the simulation engine, calling the classes defined in the C++ code. Beyond its graphical interface, the output of the simulation is done by reporting in text files, that are typically later analyzed by users through data analysis scripts, usually written in python or matlab. 
+Since its 2007 release, Cytosim has attracted a lot of use [CITE] given its capacity to rapidly simulate large networks. The input interface to the simulation lies in a configuration file, interpreted by the simulation engine, calling the classes defined in the C++ code. Beyond its graphical interface, the output of the simulation is done by reporting in text files, that are typically later analyzed by users through data analysis scripts, usually written in Python or Matlab. 
 
-Through our experience with the simulation and its users, we realized that this workflow offered several caveats. To run simulations for a range of parameter values, a list of configuration files had to be generated. To do this automatically, a utility (preconfig.py) was provided [CITE] but it did not cover all use cases. The configuration files also do not allow scripting, such as dynamic events (e.g. finish the simulation if a given event has occured). The output to text files was limited in scope, and any new desired reporting had to be coded in C++, which offered several challenges.  Lastly, the user could not add or change features without going through the lengthy and technical process of creating a new C++ class, implementing the features in C++, and consequently altering the compilation process. Given the complexity of biological processes, it was inevitable that users would require novel features, and were not able to implement them in the simulation. Ultimately, this causes issues of code maintenance because of the always growing codebase.
+Through our experience with the simulation and its users, we realized that this workflow offered several caveats. To run simulations for a range of parameter values, a list of configuration files had to be generated. To do this automatically, a utility (preconfig.py) was provided [CITE] but it did not cover all use cases. The configuration files also do not allow scripting, such as dynamic events (e.g. finish the simulation if a given event has occurred). The output to text files was limited in scope, and any new desired reporting had to be coded in C++, which offered several challenges.  Lastly, the user could not add or change features without going through the lengthy and technical process of creating a new C++ class, implementing the features in C++, and consequently altering the compilation process. Given the complexity of biological processes, it was inevitable that users would require novel features, and were not able to implement them in the simulation. Ultimately, this causes issues of code maintenance because of the always growing codebase.
 
-Therefore, we developed PyCytosim, a python interface for Cytosim. This allows user to directly access the native cytosim objects (C++ class instances) in python. Thus objects can be created, the simulation can be altered, and the results can be analyzed at runtime, in python. Thus, a user can seamlessly run and analyze simulations for ranges of parameters, while keeping a dynamic control on simulations. 
+Therefore, we developed PyCytosim, a Python interface for Cytosim. This allows user to directly access the native Cytosim objects (C++ class instances) in Python. With this module objects can be created, the simulation can be altered, and the results can be analyzed at runtime or later, in Python. Thus, a user can seamlessly run and analyze simulations for ranges of parameters, while keeping a dynamic control on simulations. 
 
 # Implementation
 
-PyCytosim is implemented in C++17 and relies on the core of Cytosim core with hardly any code change. It adds C++17 python bindings using the header library pybind11. Overwhelmingly, PyCytosim just provides access to native Cytosim objects, and their member functions. A few additional ptyhon-specific utilities are provided.
+PyCytosim is implemented in C++17 and relies on the core of Cytosim, with hardly any code change. It adds C++17 python bindings using the header library pybind11 [CITE]. Overall, PyCytosim just provides access to native Cytosim objects, and their member functions, but a few additional Python-specific utilities are provided for convenience.
 
 ## Cytosim
 
@@ -47,25 +49,27 @@ $$ f(x_0+\delta x) = f(x_0) + \delta x \left( \partial f/\partial x \right)_{x_0
 
 The vectors *f* and matrices $\partial f/\partial x$ are stored as a large vector and matrix for all the objects of the simulation. Additionally, biochemical reactions can be defined for some objects. Those are implemented through the Gillespie algorithm.
 
-The objects themselves are instances of C++ classes. Cytosim classes follow the object-oriented paradigm and uses extensively class inheritence. For example, a cytosim filament is an instance of class Fiber, that derives from class Meca (a set of points on which forces can be implemented), that itself derives from Object. One or several objects are associated to an instance of Property, that contains the properties of these objects, e.g. the rigidity of a fiber, the stiffness of a crosslinker, etc. 
+The objects themselves are instances of C++ classes. Cytosim classes follow the object-oriented paradigm and uses extensively class inheritence. For example, a Cytosim filament is an instance of class Fiber, that derives from class Meca (a set of points on which forces can be implemented), that itself derives from class Object. One or several objects are associated to an instance of Property, that contains the properties of these objects, e.g. the rigidity of a fiber, the stiffness of a crosslinker, etc. 
 
 
 ![](figures/cytosim_diagram.png)
 
-Thus a Cytosim simulation essentially stores a (usually large) collection of objects and a (usually small) collection of object properties, as well as a force vector *f* and a force derivative matrix $\partial f/\partial x$, stored in an instance of the class Meca. Object mechanics, and mechanical interactions between objects will add elements to *f* and $\partial f/\partial x$ through accessory functions implemented in the class Meca. Collections of objects are stored in instances of the class *ObjectSet*. For instance, *Simul::fibers* is an *ObjectSet* containing all the fibers being simulated.
+Thus a running Cytosim simulation essentially stores in memory a (usually large) collection of objects and a (usually small) collection of object properties, as well as a force vector *f* and a force derivative matrix $\partial f/\partial x$. The former are stored in the instance of class *Simul* while the later are stored in the instance of class *Meca*, a member of *Simul*. Object mechanics, and mechanical interactions between objects will add elements to *f* and $\partial f/\partial x$ through accessory functions implemented in the class *Meca*. Collections of objects are stored in instances of the class *ObjectSet*. For instance, *Simul::fibers* is an *ObjectSet* containing all the fibers being simulated. In addition, Cytosim exposes *Parser* a class implementing methods to control a simulation *simul* (member of *Parser*).
 
 ## PyCytosim
 
-PyCytosim is designed to provide a python interface to a running cytosim simulation - and thus can access cytosim objects in memory at runtime. Most cytosim objects, such as fibers (instances of class Fiber) are passed to python by reference, so that the destruction of the python variable does not cause the destruction of the cytosim object in memory. The python class is accessible in the PyCytosim module as ```cytosim.Class``` (e.g. ```cytosim.Fiber```). 
+PyCytosim is a python module designed to provide a python interface to Cytosim. It is a compiled module wrapping the Cytosim simulation - and thus PyCytosim provides methods to access Cytosim objects in memory at runtime. Most Cytosim objects, such as fibers (instances of class Fiber) are passed to python by reference, so that the destruction of the python variable does not cause the destruction of the Cytosim object in memory. Python classes mirroring C++ classes are accessible in the PyCytosim module as ```cytosim.Class``` (e.g. ```cytosim.Fiber```). 
 
-C++ classes have member variable and functions, that can be public or private. Most public functions of Cytosim classes have been bound or translated to the python classes. For exemple, Fiber::property() is a C++ member function of class Fiber that returns (a pointer to) the fiber's property. In python it is available as ```Fiber.property()``` and returns a reference to the property itself.
- Because it is possible to directly access native Cytosim objects, an effort was put to bind as many cytosim objects, and their members, as possible. Thus these objects can be directly manipulated in python, as well as passed as arguments to the (python-bound) C++ member functions. For instance a instance of the python class ```cytosim.Fiber``` can be passed to a binding of any C++ function that takes a Fiber as input, e.g. *Simul::fibers::erase(fiber)*. 
+C++ classes have member variable and functions, that can be public or private. The overwhelming majority public functions of Cytosim C++ classes have been bound or translated to the python classes. For exemple, Fiber::property() is a C++ member function of class Fiber that returns (a pointer to) the fiber's property. In python it is available as ```Fiber.property()``` and returns a reference to the property itself.  
+ Because it is possible to directly access native Cytosim objects, an effort was put to bind as many Cytosim objects, and their members, as possible. Thus these objects can be directly manipulated in python, as well as passed as arguments to the (python-bound) C++ member functions. For instance a instance of the python class ```cytosim.Fiber``` can be passed to a binding of any C++ function that takes a Fiber as input, e.g. *Simul::fibers::erase(fiber)* (see code example below). 
 
 For some variable types, a conversion step Python->C++ or C++->Python is necessary. For example the cytosim C++ class *Vector* is converted to a numpy array (and the other way round), since using a numpy array is more natural in python than Cytosim's *Vector*. In these cases, the conversion is usually performed in the binding rather than by the user. Therefore, for the user, PyCytosim behaves as a regular python module where (nearly) no conversion has to be explicitely performed. 
 
+
+
 Thus, to start a simulation described by a configuration file *example.cym", one would run in python :  
 ```python
-import cytosim
+import cytosim2D as cytosim
 parser = cytosim.start("example.cym")
 simul = parser.simul
 ```
@@ -75,8 +79,8 @@ Typically, we want to save the simulation state (a *frame*) every $N$ number of 
 K = 20 # number of frames  
 N = 10 # steps per frame  
 for k in range(K):  
-	simul.run(N)  
-	simul.save()
+	parser.run(N)  
+	parser.save()
 ```
 
 It is possible to access the members of ```simul``` (which is also an object of class *Simul*), e.g. it property, the fibers it stores, and the current time :
@@ -92,15 +96,16 @@ fiber = fibers[0]
 points = fiber.points() # points is a numpy array  
 ```
 
-Here ```points``` is a numpy array that has been copied from the simulation. For the sake of performance and interoperability, it is also possible to directly access the points in memory in cytosim, by explicitely converting the data in memory to a numpy array [TODO : CHECK]:
+Here ```points``` is a numpy array that has been copied from the simulation. For the sake of performance and interoperability, it is also possible to directly access the points in memory in cytosim, by explicitely converting the data in memory to a numpy array :
 ```python
 import numpy as np  
 fiber = fibers[0]  
-points = np.array(fiber.data(), copy = False)  # this is more risky as we directly access Cytosim memory
+points = fiber.data()  # this is more risky as we directly access Cytosim memory
 ```
 
-As mentioned, the python/C++ interface is transparent to the user and thus member functions can be called with conversions. Here, we actually call *Simul::fibers::erase(Fiber)* from python, passing  it as argument the fiber stored in a python variable ```fiber``` :
+As mentioned, the python/C++ interface is transparent to the user and thus most member functions can be called with conversions. Here, we actually call *Simul::fibers::erase(Fiber)* from python, passing  it as argument the fiber stored in a python variable ```fiber``` :
 ```python
+print(len(simul.fibers))  
 fibers.erase(fiber)  
 print(len(simul.fibers))  
 ```
@@ -135,27 +140,43 @@ for mt in MTs:
 	print(mt.points()) # returns the position of the points of the 1st microtubule
 ```  
 
-We can jump to the next frame iteratively, or skip directly to a chosen frame easily :
+We can jump to the next time saved iteratively, or skip directly to a chosen time moint easily :
 ```python
-frame = frame.next()  
 print(frame.time)  
-frame = simul.loadframe(10)  
+parser.next()
+frame.update()
+print(frame.time)  
+parser.load(20)
+frame.update()
 print(frame.time)  
 ```
 
 # Usage
 
-PyCytosim opens a host of new possibilities. First, reading from, and analyzing simulations becomes much more straightforward, reudcing the volume of scripting necessary. Second, to run a batch of jobs (e.g. with different parameters) can be done in pure python, and combined with analysis. This drastically reduces the need for cross language scripting. Lastly, and most importantly, the simulations becomes an open playground in which virtually anything can be done via python scripting without the need for C++ programming and compilation. We provide jupyter notebooks with PyCytosim several examples of simple to advanced usages :
+PyCytosim opens a host of new possibilities. First, reading from, and analyzing simulations becomes much more straightforward, drastically reducing the amount of scripting required. Second, to run a batch of jobs (e.g. with different parameters) can be done in pure python, and combined with analysis. This drastically reduces the need for cross language scripting. Lastly, and most importantly, the simulations becomes an open playground in which virtually anything can be done via python scripting without the need for C++ programming and compilation. We provide Jupyter notebooks with PyCytosim several examples of simple to advanced usages :
 
 - Creation and deletion of pre-defined objects ([pycytosim_objects.ipynb](https://gitlab.com/f-nedelec/cytosim/-/blob/pybind/examples/pycytosim_objects.ipynb))
 - Definition and creation of new objects ([pycytosim_extend.ipynb](https://gitlab.com/f-nedelec/cytosim/-/blob/pybind/examples/pycytosim_extend.ipynb))
 - Creation of complex objects ([pycytosim_construct.ipynb](https://gitlab.com/f-nedelec/cytosim/-/blob/pybind/examples/pycytosim_construct.ipynb))
 - Adding forces to a system ([pycytosim_meca.ipynb](https://gitlab.com/f-nedelec/cytosim/-/blob/pybind/examples/pycytosim_meca.ipynb))
-- Gamification of cytosim ([pycytoplay_callbacks.ipynb](https://gitlab.com/f-nedelec/cytosim/-/blob/pybind/examples/pycytoplay_callbacks.ipynb))
 
 ## Availability
 
-PyCytosim is open source software available on [gitlab](https://gitlab.com/f-nedelec/cytosim/-/tree/pybind), and compiles on Mac and Linux with Clang and GCC, provided required libraries are installed. It uses a GPL3 licence.
+PyCytosim is open source software available on [gitlab](https://gitlab.com/f-nedelec/cytosim/), and compiles on Mac and Linux with Clang and GCC, provided required libraries are installed. It uses a GPL3 licence. 
+
+Moreover, we distribute a conda package cytosim, that can be installed in a single command line : 
+```python
+conda install -c conda-forge cytosim
+```
+This install the 2D and 3D cytosim modules in the current environment, as well as ships Cytosim compiled executables (cytosim-sim-ND, cytosim-play-ND). All libraries are added automatically by conda to the environment, and thus no admin/root/superuser access is required.
+
+## Future developments
+(Py)Cytosim is under active development and welcomes new developpers and suggestions. The main ongoing developments we know of are :
+- A toolbox for microrheology (A. Khosravanizadeh, S. Dmitrieff and N. Minc)
+- Membrane-cytoskeleton interactions (C.T. Lee and H. Akenuwa)
+- Pycytoplay Interactive callbacks in live displayed simulations (S. Dmitrieff)
+- Revamped graphical interface using webGL (F.J. Nédélec)
+- Cytosim in the browser (F.J. Nédélec)
 
 # Citations
 
@@ -182,6 +203,8 @@ Figure sizes can be customized by adding an optional second parameter:
 
 # Acknowledgements
 
-S.D. aknowledges ...,  the entire Minc lab past and present for interactions, and INSERM for the funding. FJN acknowledges.
+S.D. acknowledges ...,  . FJN acknowledges. A.K. acknowledge. and INSERM for the funding
+A.K. and S.D. acknowledge the entire Minc lab past and present for interactions, Joel Marchand for the crucial role in IT support, and the iPoPup cluster.
+
 
 # References 

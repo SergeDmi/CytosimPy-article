@@ -63,9 +63,7 @@ PyCytosim is a python module designed to provide a python interface to Cytosim. 
 C++ classes have member variable and functions, that can be public or private. The overwhelming majority public functions of Cytosim C++ classes have been bound or translated to the python classes. For exemple, Fiber::property() is a C++ member function of class Fiber that returns (a pointer to) the fiber's property. In python it is available as ```Fiber.property()``` and returns a reference to the property itself.  
  Because it is possible to directly access native Cytosim objects, an effort was put to bind as many Cytosim objects, and their members, as possible. Thus these objects can be directly manipulated in python, as well as passed as arguments to the (python-bound) C++ member functions. For instance a instance of the python class ```cytosim.Fiber``` can be passed to a binding of any C++ function that takes a Fiber as input, e.g. *Simul::fibers::erase(fiber)* (see code example below). 
 
-For some variable types, a conversion step Python->C++ or C++->Python is necessary. For example the cytosim C++ class *Vector* is converted to a numpy array (and the other way round), since using a numpy array is more natural in python than Cytosim's *Vector*. In these cases, the conversion is usually performed in the binding rather than by the user. Therefore, for the user, PyCytosim behaves as a regular python module where (nearly) no conversion has to be explicitely performed. 
-
-
+For some variable types, a conversion step Python->C++ or C++->Python is necessary. For example the cytosim C++ class *Vector* is converted to a numpy array (and the other way round), since using a numpy array is more natural in python than Cytosim's *Vector*. In these cases, the conversion is usually performed in the binding rather than by the user. Therefore, for the user, PyCytosim behaves as a regular python module where (nearly) no conversion has to be explicitely performed.  
 
 Thus, to start a simulation described by a configuration file *example.cym", one would run in python :  
 ```python
@@ -122,13 +120,12 @@ PyCytosim provides a convenient interface to the objects stored in a simulation,
 ```python
 import cytosim2D as cytosim  
 parser = cytosim.open() # assuming properties.cmo and objects.cmo are in the current folder
-simul = parser.simul
-simul.load(0) # loads in memory the first recorded simulation state
+parser.load(0) # loads in memory the first recorded simulation state
 ```
 
-A frame (instance of python class *cytosim.Frame*) can be created through ```simul.frame()``` . It behaves as a dictionary of lists of objects having the same property. In the following code :  
+A frame (instance of python class *cytosim.Frame*) can be created through ```parser.frame()``` . It behaves as a dictionary of lists of objects having the same property. In the following code :  
 ```python
-frame = simul.frame()  
+frame = parser.frame()  
 MTs = frame["microtubule"]  
 ```  
 MTs is a list of objects, the name of which is *"microtubule"*, and all described by the same property :

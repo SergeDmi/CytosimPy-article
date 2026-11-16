@@ -52,7 +52,7 @@ The vectors *f* and matrices $\partial f/\partial x$ are stored as a large vecto
 The objects themselves are instances of C++ classes. Cytosim classes follow the object-oriented paradigm and uses extensively class inheritence. For example, a Cytosim filament is an instance of class Fiber, that derives from class Meca (a set of points on which forces can be implemented), that itself derives from class Object. One or several objects are associated to an instance of Property, that contains the properties of these objects, e.g. the rigidity of a fiber, the stiffness of a crosslinker, etc. 
 
 
-![](figures/cytosim_diagram.png)
+![](figures/cytosim_diagram2.png)
 
 Thus a running Cytosim simulation essentially stores in memory a (usually large) collection of objects and a (usually small) collection of object properties, as well as a force vector *f* and a force derivative matrix $\partial f/\partial x$. The former are stored in the instance of class *Simul* while the later are stored in the instance of class *Meca*, a member of *Simul*. Object mechanics, and mechanical interactions between objects will add elements to *f* and $\partial f/\partial x$ through accessory functions implemented in the class *Meca*. Collections of objects are stored in instances of the class *ObjectSet*. For instance, *Simul::fibers* is an *ObjectSet* containing all the fibers being simulated. In addition, Cytosim exposes *Parser* a class implementing methods to control a simulation *simul* (member of *Parser*).
 

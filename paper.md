@@ -96,15 +96,15 @@ fiber = fibers[0]
 points = fiber.points() # points is a numpy array  
 ```
 
-Here ```points``` is a numpy array that has been copied from the simulation. For the sake of performance and interoperability, it is also possible to directly access the points in memory in cytosim, by explicitely converting the data in memory to a numpy array :
+Here ```points``` is a numpy array that has been copied from the simulation. For the sake of performance and interoperability, it is also possible to directly access the points in cytosim's memory. This creates a numpy array that is merely a wrapper around cytosim's internal data :
 ```python
-import numpy as np  
 fiber = fibers[0]  
 points = fiber.data()  # this is more risky as we directly access Cytosim memory
 ```
 
 As mentioned, the python/C++ interface is transparent to the user and thus most member functions can be called with conversions. Here, we actually call *Simul::fibers::erase(Fiber)* from python, passing  it as argument the fiber stored in a python variable ```fiber``` :
 ```python
+fiber = fibers[0]  
 print(len(simul.fibers))  
 fibers.erase(fiber)  
 print(len(simul.fibers))  
@@ -120,7 +120,7 @@ Only repulsive forces             |  + Attractive forces | + Aligment | + Moveme
 
 PyCytosim provides a convenient interface to the objects stored in a simulation, that is specifically designed for python use. First we will load the simulation that we have previously saved, the results of which being stored in *objects.cmo*, and the configuration in *properties.cmo* :
 ```python
-import cytosim  
+import cytosim2D as cytosim  
 parser = cytosim.open() # assuming properties.cmo and objects.cmo are in the current folder
 simul = parser.simul
 simul.load(0) # loads in memory the first recorded simulation state
